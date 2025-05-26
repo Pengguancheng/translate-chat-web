@@ -66,7 +66,7 @@ export default function Chat() {
 
   const sendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    if (socket && inputMessage) {
+    if (socket && inputMessage && inputMessage.length <= 200) {
       socket.send(inputMessage);
       setInputMessage('');
     }
@@ -100,20 +100,26 @@ export default function Chat() {
             </div>
           ))}
         </div>
-        <form onSubmit={sendMessage} className="flex">
-          <input
-            type="text"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            className="flex-grow mr-2 p-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-            placeholder="Type a message..."
-          />
-          <button 
-            type="submit" 
-            className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-          >
-            Send
-          </button>
+        <form onSubmit={sendMessage} className="flex flex-col">
+          <div className="flex mb-2">
+            <input
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value.slice(0, 200))}
+              className="flex-grow mr-2 p-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+              placeholder="Type a message..."
+              maxLength={200}
+            />
+            <button 
+              type="submit" 
+              className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+            >
+              Send
+            </button>
+          </div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            {inputMessage.length}/200 characters
+          </div>
         </form>
       </div>
     </div>
